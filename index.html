@@ -122,3 +122,121 @@ calc x * y / 3</textarea>
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroLang IDE - A Custom Browser-Based Interpreter</title>
+    <style>
+        body { background-color: #0d1117; color: #c9d1d9; font-family: sans-serif; padding: 20px; }
+        header { text-align: center; background: #1e4620; padding: 10px; border-radius: 6px; margin-bottom: 20px; }
+        .ide-container { max-width: 800px; margin: 0 auto; }
+        textarea { width: 100%; height: 200px; background: #161b22; color: #58a6ff; font-family: monospace; font-size: 16px; padding: 15px; border: 1px solid #30363d; border-radius: 6px; box-sizing: border-box; }
+        .btn-group { margin: 15px 0; }
+        .btn { padding: 12px 25px; font-size: 16px; font-weight: bold; border: none; border-radius: 6px; cursor: pointer; margin-right: 10px; }
+        .run-btn { background: #2ea44f; color: white; }
+        .clear-btn { background: #30363d; color: #c9d1d9; }
+        .console-header { background: #f1c40f; color: black; display: inline-block; padding: 5px 10px; font-weight: bold; border-radius: 4px; margin-bottom: 10px; }
+        .console-box { background: #161b22; min-height: 120px; padding: 15px; border-radius: 6px; border: 1px solid #30363d; font-family: monospace; font-size: 16px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>AgroLang IDE</h1>
+        <p>An Educational, Browser-Based Programming Language inspired by Ruby & Go</p>
+    </header>
+
+    <main class="ide-container">
+        <section class="editor-section">
+            <h3>Write AgroLang Code:</h3>
+            <textarea id="code" spellcheck="false"># This is a comment
+print "Welcome to AgroLang!"
+
+# Variable declaration
+set x = 15
+set y = 5
+
+# Math Operations
+calc x + y
+calc x * y / 3</textarea>
+            
+            <div class="btn-group">
+                <button class="btn run-btn" onclick="runCode()">Run Code</button>
+                <button class="btn clear-btn" onclick="clearConsole()">Clear Output</button>
+            </div>
+        </section>
+
+        <section class="console-section">
+            <div class="console-header">Console Output:</div>
+            <div id="output" class="console-box"></div>
+        </section>
+    </main>
+
+    <script>
+        let variables = {};
+
+        function runCode() {
+            const code = document.getElementById("code").value;
+            const output = document.getElementById("output");
+            output.innerHTML = "";
+            variables = {}; 
+
+            const lines = code.split("\n");
+
+            lines.forEach((line) => {
+                line = line.trim();
+                if (line === "" || line.startsWith("#")) return;
+
+                if (line.startsWith("set ")) {
+                    let assignment = line.replace("set ", "").trim();
+                    if (assignment.includes("=")) {
+                        let parts = assignment.split("=");
+                        let varName = parts[0].trim();
+                        let varValueExpr = parts[1].trim();
+                        try {
+                            variables[varName] = evaluateExpression(varValueExpr);
+                        } catch (err) {
+                            output.innerHTML += <span style="color: #ff6b6b;">🔴 Variable Assignment Error</span><br>;
+                        }
+                    }
+                }
+                else if (line.startsWith("print ")) {
+                    let content = line.replace("print ", "").trim();
+                    if (content.startsWith('"') && content.endsWith('"')) {
+                        content = content.slice(1, -1);
+                        output.innerHTML += <span style="color: #2ecc71;">🟢 [Output]: ${content}</span><br>;
+                    } else if (variables.hasOwnProperty(content)) {
+                        output.innerHTML += <span style="color: #2ecc71;">🟢 [Output]: ${variables[content]}</span><br>;
+                    } else {
+                        output.innerHTML += <span style="color: #ff6b6b;">🔴 Undefined variable in print</span><br>;
+                    }
+                }
+                else if (line.startsWith("calc ")) {
+                    let expr = line.replace("calc ", "").trim();
+                    try {
+                        let result = evaluateExpression(expr);
+                        output.innerHTML += <span style="color: #f1c40f;">🟡 [Result]: ${result}</span><br>;
+                    } catch (err) {
+                        output.innerHTML += <span style="color: #ff6b6b;">🔴 Calculation Error</span><br>;
+                    }
+                }
+            });
+        }
+
+        function evaluateExpression(expr) {
+            let processedExpr = expr;
+            for (let key in variables) {
+                let regex = new RegExp(\\b${key}\\b, 'g');
+                processedExpr = processedExpr.replace(regex, variables[key]);
+            }
+            return Function("use strict"; return (${processedExpr}))();
+        }
+
+        function clearConsole() {
+            document.getElementById("output").innerHTML = "";
+        }
+    </script>
+</body>
+</html>
