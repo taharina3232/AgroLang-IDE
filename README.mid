@@ -1,0 +1,20 @@
+#  AgroLang IDE
+
+AgroLang is a lightweight, browser-based toy programming language designed to demonstrate the core fundamentals of custom interpreters, lexical scanning, and variable environments.
+
+##  Live Demo
+You can run this project instantly by enabling GitHub Pages on this repository.
+
+## ✨ Features
+- *Comments Support:* Use # to write developer notes.
+- **Variable Scope (set):** Declare variables dynamically.
+- **Print System (print):** Output raw text strings or evaluate saved variables.
+- **Mathematical Interpreter (calc):** Supports complex operations (+, -, *, /).
+
+## 💻 Sample Syntax Guide
+```text
+print "Hello World from AgroLang!"
+set apples = 50
+set bananas = 20
+set total = apples + bananas
+calc total * 2
