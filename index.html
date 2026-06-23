@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgroLang IDE - A Custom Browser-Based Language</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="header">
+    <h1> AgroLang IDE</h1>
+    <p>An Educational, Browser-Based Programming Language inspired by Ruby & Go</p>
+  </div>
+
+  <div class="container">
+    <div class="editor-section">
+      <h3> Write AgroLang Code:</h3>
+      <textarea id="code" placeholder="Write AgroLang code here...">
+# This is a comment
+print "Welcome to AgroLang!"
+
+# Variable declaration
+set x = 15
+set y = 5
+
+# Math Operations
+calc x + y
+calc x * y / 3
+      </textarea>
+      <button onclick="runCode()"> Run Code</button>
+      <button onclick="clearConsole()" class="btn-clear"> Clear Output</button>
+    </div>
+
+    <div class="output-section">
+      <h3>🖥 Console Output:</h3>
+      <div class="output" id="output"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
